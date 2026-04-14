@@ -2,6 +2,7 @@ import os
 import discord
 from discord.ext import commands
 import aiohttp
+import dotenv
 
 DISCORD_TOKEN = os.getenv("DISCORD_TOKEN")
 OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")
