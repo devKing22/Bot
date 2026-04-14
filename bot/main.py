@@ -1,39 +1,42 @@
 import discord
 from discord.ext import commands
 import os
-import dotenv
 
-# Carregar variáveis de ambiente
-dotenv.load_dotenv()
+token = os.getenv("TOKEN_DC")
 
-# Substitua com seu token do bot
-TOKEN_DO_SEU_BOT = os.getenv("DISCORD_TOKEN")
+bot = commands.Bot(command_prefix='.', intents=discord.Intents.all())
 
-intents = discord.Intents.default()
-intents.messages = True
-intents.message_content = True
-
-bot = commands.Bot(command_prefix="!", intents=intents)
-
-@bot.event
+@Bot.event
 async def on_ready():
-    print(f"Bot conectado como {bot.user}")
+    print(f'Bot conectado como {bot.user.name}')
 
-# Comando clear: apenas usuários com a role específica podem usar
-@bot.command()
-@commands.has_role("1493360768190517498")  # Substitua pelo ID do cargo (role) desejado
-async def clear(ctx, quantidade: int = None):
-    if quantidade is None:
-        await ctx.send("🔴 Por favor, especifique quantas mensagens deseja limpar. Ex: `!clear 10`")
+@Bot.command(name='c')
+@commands.has_permissions(manage_messages=True)
+async def clear_messages(ctx, quantidade: int):
+    """
+    Comando para limpar mensagens no canal.
+    Uso: .c <número>
+    """
+    if quantidade <= 0:
+        await ctx.send("❌ O número deve ser maior que zero.", delete_after=3)
         return
 
-    if quantidade < 1 or quantidade > 100:
-        await ctx.send("🔴 A quantidade deve estar entre 1 e 100.")
+    if quantidade > 400:
+        await ctx.send("⚠️ Você pode deletar no máximo 400 mensagens por vez.", delete_after=5)
         return
 
-    # Deleta as mensagens (incluindo a do comando)
-    await ctx.channel.purge(limit=quantidade + 1)
-    await ctx.send(f"🗑️ Foram deletadas **{quantidade}** mensagens.", delete_after=5)
+    deletadas = await ctx.channel.purge(limit=quantidade + 1)
 
-# Inicia o bot
-bot.run(TOKEN_DO_SEU_BOT)
+    await ctx.send(f"✅ {len(deletadas)-1} mensagens apagadas.", delete_after=3)
+
+@clear_messages.error
+async def clear_error(ctx, error):
+    if isinstance(error, commands.MissingRequiredArgument):
+        await ctx.send("❗ Uso correto: !c <número>", delete_after=5)
+    elif isinstance(error, commands.BadArgument):
+        await ctx.send("❌ O argumento deve ser um número inteiro.", delete_after=5)
+    elif isinstance(error, commands.MissingPermissions):
+        await ctx.send("🔒 Você precisa da permissão Gerenciar Mensagens para usar este comando.", delete_after=5)
+    else:
+        await ctx.send("⚠️ Ocorreu um erro inesperado.")
+bot.run('token')
