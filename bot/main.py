@@ -4,7 +4,7 @@ import os
 
 token = os.getenv("TOKEN_DC")
 
-bot = commands.Bot(command_prefix='.', intents=discord.Intents.all())
+Bot = commands.Bot(command_prefix='.', intents=discord.Intents.all())
 
 @Bot.event
 async def on_ready():
