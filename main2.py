@@ -4,7 +4,7 @@ import os
 import dotenv
 
 # Substitua com seu token do bot
-TOKEN_DO_SEU_BOT = os.getenv("DISCORDTOKEN")
+TOKEN_DO_SEU_BOT = os.getenv("DISCORD_TOKEN")
 
 intents = discord.Intents.default()
 intents.messages = True
