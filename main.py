@@ -3,8 +3,8 @@ import discord
 from discord.ext import commands
 import aiohttp
 
-DISCORD_TOKEN = "MTQ5MzM2NDU2MDE4MTIwMzA4Ng.G0iyu5.7LX2F5SNotubEYxeKZ6DPUjSN8PrNJT0qfrjgI"
-OPENROUTER_API_KEY = "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"
+DISCORD_TOKEN = os.getenv("DISCORD_TOKEN")
+OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")
 OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions"
 MODEL = "openrouter/elephant-alpha"
 
