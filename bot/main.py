@@ -4,13 +4,13 @@ import os
 
 token = os.getenv("TOKEN_DC")
 
-Bot = commands.Bot(command_prefix='.', intents=discord.Intents.all())
+bot = commands.Bot(command_prefix='.', intents=discord.Intents.all())
 
-@Bot.event
+@bot.event
 async def on_ready():
     print(f'Bot conectado como {bot.user.name}')
 
-@Bot.command(name='c')
+@bot.command(name='c')
 @commands.has_permissions(manage_messages=True)
 async def clear_messages(ctx, quantidade: int):
     """
